@@ -14,9 +14,7 @@ $ docker run prong/jenkins-slave-alpine:1.0 "<public key>"
 
 ## 配合jenkins Docker Plugin使用
 
-To use this image with [Docker Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Docker+Plugin), you need to
-
-进行jenkins master节点管理控制台->系统管理->系统配置，配置Docker参数。
+进入jenkins master节点管理控制台->系统管理->系统配置，配置Docker参数。
 
 - Docker Image：prong/jenkins-slave-alpine:1.0
 - Remote File System Root：/home/jenkins
