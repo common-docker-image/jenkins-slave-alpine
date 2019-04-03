@@ -14,7 +14,7 @@ RUN addgroup -g ${gid} ${group} \
     && passwd -u jenkins
 
 # setup SSH server and git
-RUN apk --update add --no-cache openssh git \
+RUN apk --update add --no-cache openssh git sudo \
   && rm -rf /var/cache/apk/*
 
 RUN sed -i /etc/ssh/sshd_config \
@@ -29,8 +29,6 @@ RUN sed -i /etc/ssh/sshd_config \
 VOLUME "${JENKINS_AGENT_HOME}" "/tmp" "/run" "/var/run"
 WORKDIR "${JENKINS_AGENT_HOME}"
 
-COPY setup-sshd /usr/local/bin/setup-sshd
-
 # add maven support
 ENV MAVEN_VERSION 3.5.2
 ENV MAVEN_HOME /usr/lib/mvn
@@ -41,6 +39,17 @@ RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/ap
   && rm apache-maven-$MAVEN_VERSION-bin.tar.gz \
   && mv apache-maven-$MAVEN_VERSION /usr/lib/mvn \
   && ln -s "$MAVEN_HOME/bin/mvn" /usr/bin/mvn 
+
+# add docker cli support
+RUN curl -O https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz \
+    && tar zxvf docker-latest.tgz \
+    && cp docker/docker /usr/local/bin/ \
+    && rm -rf docker docker-latest.tgz
+
+# enable sudo
+RUN echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+COPY setup-sshd /usr/local/bin/setup-sshd
 
 EXPOSE 22
 
