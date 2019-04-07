@@ -19,9 +19,12 @@ if [ -S /var/run/docker.sock ]; then
     addgroup jenkins root
   else
     # support run from CentOS/Ubuntu
-    DOCKER_SOCKET_OWNER_GROUP_ID=$(stat -c %g /var/run/docker.sock)
-    addgroup -g ${DOCKER_SOCKET_OWNER_GROUP_ID} docker
-    addgroup jenkins docker
+    # create group if not exists
+    if !(egrep -q "^docker" /etc/group); then
+      DOCKER_SOCKET_OWNER_GROUP_ID=$(stat -c %g /var/run/docker.sock)
+      addgroup -g ${DOCKER_SOCKET_OWNER_GROUP_ID} docker
+      addgroup jenkins docker
+    fi
   fi
 fi
 
