@@ -41,10 +41,10 @@ RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/ap
   && ln -s "$MAVEN_HOME/bin/mvn" /usr/bin/mvn 
 
 # add docker cli support
-RUN curl -O https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz \
-    && tar zxvf docker-latest.tgz \
+RUN curl -O https://download.docker.com/linux/static/stable/x86_64/docker-17.06.2-ce.tgz \
+    && tar zxvf docker-17.06.2-ce.tgz \
     && cp docker/docker /usr/local/bin/ \
-    && rm -rf docker docker-latest.tgz
+    && rm -rf docker docker-17.06.2-ce.tgz
 
 # enable sudo
 RUN echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
